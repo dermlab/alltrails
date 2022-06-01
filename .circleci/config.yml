@@ -1,0 +1,117 @@
+version: 2
+jobs:
+  Requirements:
+    docker:
+      - image: 310228935478.dkr.ecr.us-west-2.amazonaws.com/helloworld:7f3f6ee
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - run:
+
+  Check:
+    docker:
+      - image: 310228935478.dkr.ecr.us-west-2.amazonaws.com/helloworld:7f3f6ee
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - run:
+
+  Build:
+    docker:
+      - image: 310228935478.dkr.ecr.us-west-2.amazonaws.com/helloworld:7f3f6ee
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+      - run:
+          name: Build
+          command: |
+
+  Deploy-Staging:
+    docker:
+      - image: 310228935478.dkr.ecr.us-west-2.amazonaws.com/helloworld:7f3f6ee
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # deploy staging
+      - run:
+          name: Deploy Staging
+          command: |
+
+  Test-Staging:
+    docker:
+      - image: 310228935478.dkr.ecr.us-west-2.amazonaws.com/helloworld:7f3f6ee
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # test staging
+      - run:
+          name: Test Staging
+          command: |
+              make test ENV=staging
+
+  Deploy-Production:
+    docker:
+      - image: 310228935478.dkr.ecr.us-west-2.amazonaws.com/helloworld:7f3f6ee
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # deploy production
+      - run:
+          name: Deploy Production
+          command: |
+
+  Test-Production:
+    docker:
+      - image: 310228935478.dkr.ecr.us-west-2.amazonaws.com/helloworld:7f3f6ee
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      # test production
+      - run:
+          name: Test Production
+          command: |
+              make test ENV=production
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - Check
+      - Build:
+          requires:
+            - Check
+      - Deploy-Staging:
+          requires:
+            - Check
+            - Build
+      - Test-Staging:
+          requires:
+            - Deploy-Staging
+      - Deploy-Production:
+          requires:
+            - Check
+            - Build
+            - Deploy-Staging
+            - Test-Staging
+      - Test-Production:
+          requires:
+            - Deploy-Production
+# trigger build with this change
