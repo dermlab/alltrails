@@ -1,0 +1,4 @@
+To separate between staging for QA And Production, I would create a separate area on the Amazon AWS
+infrastructure and I would deploy the same docker image to both even though they may have different
+configurations.   When QA is done with testing, I just swich on the production image by pointing
+the url to it.  Since it's the same image that contains the same software that QA has tested.
